@@ -26,6 +26,8 @@ class Lesson(models.Model):
     preview = models.ImageField(upload_to='lessons/%Y/%m')
     description = models.TextField(max_length=500)
 
+    video_url = models.URLField(verbose_name='video url', null=True, blank=True)
+
 
     class Meta:
         db_table = 'lesson'
