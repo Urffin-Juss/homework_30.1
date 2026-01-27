@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.db.models import Count
 from rest_framework import viewsets, permissions
 from rest_framework import generics
-from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer
 
 from courses.models import Course, Lesson
@@ -10,9 +9,11 @@ from courses.models import Course, Lesson
 
 class CourseViewSet(viewsets.ModelViewSet):
 
-    queryset = Course.objects.all()
+    queryset = Course.objects.all().annotate(lesson_count = Count('lesson'))
+    serializer_class = CourseSerializer
     serializer_class = CourseSerializer
     permission_classes = [permissions.AllowAny]
+
 
 
 class LessonListCreatedView(generics.ListCreateAPIView):

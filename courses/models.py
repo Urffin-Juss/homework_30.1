@@ -5,7 +5,6 @@ class Course(models.Model):
     title = models.CharField(max_length=100, unique=True)
     preview = models.ImageField(upload_to='courses/%Y/%m', blank=True, null=True)
     description = models.TextField(max_length=500)
-    description = models.TextField(max_length=500)
 
 
     class Meta:

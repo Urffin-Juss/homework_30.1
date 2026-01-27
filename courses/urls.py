@@ -7,7 +7,7 @@ app_name = 'courses'
 
 router = routers.DefaultRouter()
 
-router.register(r'courses', CourseViewSet)
+router.register(r'courses', CourseViewSet, basename='courses')
 
 urlpatterns = [
     path('', include(router.urls)),
