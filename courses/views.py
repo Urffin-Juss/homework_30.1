@@ -9,8 +9,7 @@ from courses.models import Course, Lesson
 
 class CourseViewSet(viewsets.ModelViewSet):
 
-    queryset = Course.objects.all().annotate(lesson_count=Count('lessons'))
-    serializer_class = CourseSerializer
+    queryset = Course.objects.all().annotate(lessons_count=Count('lessons'))
     serializer_class = CourseSerializer
     permission_classes = [permissions.AllowAny]
 
