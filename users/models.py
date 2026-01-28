@@ -1,8 +1,11 @@
+import uuid
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phonenumber_field.modelfields  import PhoneNumberField
 from django.conf import settings
+from courses.models import Course, Lesson
+from django.core.exceptions import ValidationError
 
 
 
@@ -57,6 +60,11 @@ class User(AbstractUser):
 class Payment(models.Model):
     """Payment model"""
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    CASH = "cash"
+    TRANSFER = "transfer"
+
     PAYMENT_METHOD_CHOICES = [
         ('cash', 'cash'),
         ('transfer', 'transfer'),
@@ -69,7 +77,7 @@ class Payment(models.Model):
         related_name='payments',
         verbose_name='user',
     )
-    payment_date = models.DateField(verbose_name='payment date')
+    payment_date = models.DateField(auto_now_add=True, verbose_name='payment date')
     paid_course = models.ForeignKey(
         'courses.Course',
         on_delete=models.SET_NULL,
@@ -79,7 +87,7 @@ class Payment(models.Model):
     )
 
     paid_lesson = models.ForeignKey(
-        'lessons.Lesson',
+        'courses.Lesson',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -101,6 +109,10 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment {self.id} from {self.user.email} - {self.amount}"
+
+    def clean(self):
+        if not self.paid_course and not self.paid_lesson:
+            raise ValidationError("Укажите paid_course или paid_lesson.")
 
     class Meta:
         verbose_name = 'payment'
