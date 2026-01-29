@@ -26,8 +26,8 @@ class UserManager(BaseUserManager):
 
 
     def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
         return self._create_user(email, password, **extra_fields)
 
 
@@ -107,8 +107,7 @@ class Payment(models.Model):
         verbose_name='payment method',
     )
 
-    def __str__(self):
-        return f"Payment {self.id} from {self.user.email} - {self.amount}"
+
 
     def clean(self):
         if not self.paid_course and not self.paid_lesson:
@@ -118,6 +117,9 @@ class Payment(models.Model):
         verbose_name = 'payment'
         verbose_name_plural = 'payments'
         ordering = ('-payment_date',)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.amount}"
 
 
 
