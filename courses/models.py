@@ -49,4 +49,9 @@ class Lesson(models.Model):
         return self.title
 
 
-# Create your models here.
+class IsOwnerOrModerator(models.Model):
+    def has_object_permission(self, request, view, obj):
+        if request.user.groups.filter(name='moderators').exists():
+            return True
+        return obj.owwner == request.user
+
