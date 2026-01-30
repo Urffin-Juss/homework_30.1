@@ -1,10 +1,17 @@
 from django.db import models
+from django.conf import settings
+
 
 
 class Course(models.Model):
     title = models.CharField(max_length=100, unique=True)
     preview = models.ImageField(upload_to='courses/%Y/%m', blank=True, null=True)
     description = models.TextField(max_length=500)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='courses'
+    )
 
 
     class Meta:
@@ -26,6 +33,12 @@ class Lesson(models.Model):
     description = models.TextField(max_length=500)
 
     video_url = models.URLField(verbose_name='video url', null=True, blank=True)
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='courses'
+    )
 
 
     class Meta:
