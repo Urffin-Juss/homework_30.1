@@ -1,6 +1,10 @@
-from django.shortcuts import renderfrom rest_framework import viewsets, permissions, filters
+from django.shortcuts import renderfrom
+from rest_framework import generics
+
+rest_framework import viewsets, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Payment
+from .models import User
 from .serializers import PaymentSerializer
 
 
@@ -14,7 +18,10 @@ class PaymentViewSet(viewsets.ModelViewSet):
     ordering_fields = ['paid_date',]
     ordering = ('-paid_date',)
 
-
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 
