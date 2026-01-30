@@ -4,7 +4,6 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import CourseSerializer, LessonSerializer
-from rest_framework import
 from courses.models import Course, Lesson, IsOwnerOrModerator
 
 

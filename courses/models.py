@@ -10,7 +10,7 @@ class Course(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='courses'
+        related_name='owned_courses'
     )
 
 
@@ -37,7 +37,7 @@ class Lesson(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='courses'
+        related_name='owned_lessons'
     )
 
 
