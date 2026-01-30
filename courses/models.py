@@ -55,3 +55,17 @@ class IsOwnerOrModerator(models.Model):
             return True
         return obj.owwner == request.user
 
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="subscriptions")
+    course = models.ForeignKey("courses.Course", on_delete=models.CASCADE, related_name="subscriptions")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "course")
+        verbose_name = "subscription"
+        verbose_name_plural = "subscriptions"
+
+    def __str__(self):
+        return f"{self.user_id} -> {self.course_id}"
