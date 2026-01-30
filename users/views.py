@@ -1,11 +1,11 @@
 from django.shortcuts import renderfrom
 from rest_framework import generics
 
-rest_framework import viewsets, permissions, filters
+from rest_framework import viewsets, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Payment
 from .models import User
-from .serializers import PaymentSerializer
+from .serializers import PaymentSerializer, UserSerializer
 
 
 class PaymentViewSet(viewsets.ModelViewSet):
