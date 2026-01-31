@@ -74,7 +74,7 @@ WSGI_APPLICATION = 'drf_school.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hm_31.1',
+        'NAME': 'hw_31.1',
         'USER': 'admin',
         'PASSWORD': os.getenv('DJANGO_DATABASE_PASSWORD'),
         'HOST': 'localhost',
