@@ -2,9 +2,7 @@ from django.db.models import Count
 from rest_framework import viewsets, permissions
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-
 from .serializers import CourseSerializer, LessonSerializer
-from rest_framework import
 from courses.models import Course, Lesson, IsOwnerOrModerator
 
 

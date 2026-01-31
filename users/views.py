@@ -1,6 +1,4 @@
-from django.shortcuts import renderfrom
 from rest_framework import generics
-
 from rest_framework import viewsets, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Payment
