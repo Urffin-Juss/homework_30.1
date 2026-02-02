@@ -1,3 +1,4 @@
+from django.contrib.auth.middleware import get_user
 from django.db.models import Count
 from rest_framework import viewsets, permissions
 from rest_framework import generics
@@ -5,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import CourseSerializer, LessonSerializer
 from courses.models import Course, Lesson
 from .permissions import IsOwnerOrModerator
+
 
 
 class CourseViewSet(viewsets.ModelViewSet):
