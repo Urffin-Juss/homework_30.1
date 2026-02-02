@@ -61,7 +61,7 @@ class CreateCheckoutSessionView(APIView):
 
         stripe.api_key = settings.STRIPE_SECRET_KEY
 
-        session = stripe.checkout_Session.Create(
+        session = stripe.checkout.Session.create(
         mode="payment",
         payment_method_types=["card"],
         line_items=[
