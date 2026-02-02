@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import CourseViewSet, LessonListCreatedView, LessonRetrieveUpdatedView, SubscribeView, UnsubscribeView
+from .views import CourseViewSet, LessonListCreatedView, LessonRetrieveUpdatedView, SubscribeView, UnsubscribeView, \
+    CreateCheckoutSessionView
 
 app_name = 'courses'
 
