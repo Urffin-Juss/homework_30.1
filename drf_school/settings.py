@@ -22,6 +22,7 @@ STRIPE_PUBLISHABLE_KEY = os.getenv('DJANGO_STRIP_PUBLISHABLE_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = []
+DOMAIN = 'http://localhost:8000'
 
 
 # Application definition
@@ -141,8 +142,12 @@ SWAGGER_SETTINGS = {
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
-            'in': 'header'
+            'in': 'header',
+            'description': 'JWT token. Пример: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."'
         }
     },
     'USE_SESSION_AUTH': False,
+    'JSON_EDITOR': True,
+    'DEFAULT_MODEL_RENDERING': 'example',
+    'OPERATIONS_SORTER': 'method',
 }
