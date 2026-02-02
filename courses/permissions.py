@@ -22,6 +22,7 @@ class IsOwnerOrModerator(BasePermission):
         return True  # обычный юзер — дальше решит object permission
 
     def has_object_permission(self, request, view, obj):
+        user = request.user
         if self.is_moderator(request.user):
             # модератор может читать/менять, но не удалять
             if request.method == "DELETE":

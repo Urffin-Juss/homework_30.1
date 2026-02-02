@@ -3,7 +3,8 @@ from rest_framework import viewsets, permissions
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .serializers import CourseSerializer, LessonSerializer
-from courses.models import Course, Lesson, IsOwnerOrModerator
+from courses.models import Course, Lesson
+from .permissions import IsOwnerOrModerator
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -27,12 +28,12 @@ class CourseViewSet(viewsets.ModelViewSet):
 class LessonListCreatedView(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
     def get_queryset(self):
-        qs = Lesson.objects.all().order_by("id")
+        qs = super().get_queryset()
         user = self.request.user
-        if user.groups.filter(name="moderators").exists():
+        if self.request.user.groups.filter(name="moderators").exists():
             return qs
         return qs.filter(owner=user)
 
@@ -43,7 +44,7 @@ class LessonListCreatedView(generics.ListCreateAPIView):
 class LessonRetrieveUpdatedView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
     def get_queryset(self):
         qs = Lesson.objects.all().order_by("id")

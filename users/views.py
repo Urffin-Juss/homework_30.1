@@ -6,6 +6,24 @@ from .models import User
 from .serializers import PaymentSerializer, UserSerializer
 
 
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        queryset = User.objects.all()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter()
+
+        return queryset
+
+
+
+
+
+
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
