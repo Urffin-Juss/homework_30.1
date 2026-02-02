@@ -15,5 +15,6 @@ urlpatterns = [
 
     path("courses/<int:course_id>/subscribe/", SubscribeView.as_view(), name="course-subscribe"),
     path("courses/<int:course_id>/unsubscribe/", UnsubscribeView.as_view(), name="course-unsubscribe"),
+    path("courses/<int:pk>/pay/", CreateCheckoutSessionView.as_view(), name="course-pay"),
 
 ]

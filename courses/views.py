@@ -1,3 +1,6 @@
+import stripe
+from django.conf import settings
+from django.contrib.messages.storage import session
 from django.db.models import Count
 from rest_framework import viewsets, permissions, status
 from rest_framework import generics
@@ -47,6 +50,42 @@ class UnsubscribeView(APIView):
     def delete(self, request, course_id: int):
         Subscription.objects.filter(user=request.user, course_id=course_id).delete()
         return Response({"detail": "unsubscribed"}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+class CreateCheckoutSessionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        course = Course.objects.get(pk=pk)
+
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+
+        session = stripe.checkout_Session.Create(
+        mode="payment",
+        payment_method_types=["card"],
+        line_items=[
+            {
+                "price_data": {
+                    "currency": "rub",
+                    "product_data": {"name": course.title},
+                    "unit_amount": int(course.price * 100),
+                },
+                "quantity": 1,
+            }
+
+
+        ],
+        success_url = f"{settings.DOMAIN}/swagger/",
+        cancel_url = f"{settings.DOMAIN}/swagger/",
+        metadata = {
+            "course_id": str(course.id),
+            "user_id": str(request.user.id),
+            }
+        )
+
+
+        return Response({'checkout_url': session.url}, status=status.HTTP_201_CREATED)
 
 
 
