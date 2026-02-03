@@ -15,107 +15,72 @@ from courses.models import Course, Lesson, IsOwnerOrModerator, Subscription
 
 # ==================== COURSE VIEWSET ====================
 
-@swagger_auto_schema(
-    method='get',
-    operation_description="Получить список всех курсов",
-    responses={200: CourseSerializer(many=True)}
-)
-@swagger_auto_schema(
-    method='post',
-    operation_description="Создать новый курс",
-    request_body=CourseSerializer,
-    responses={
-        201: CourseSerializer,
-        400: "Неверные данные"
-    }
-)
 class CourseViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet для работы с курсами.
-
-    Предоставляет полный CRUD для курсов с проверкой прав доступа.
-    """
     queryset = Course.objects.all().annotate(lessons_count=Count('lessons'))
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrModerator]
     pagination_class = DefaultPagination
 
+    @swagger_auto_schema(
+        operation_description="Получить список всех курсов",
+        responses={200: CourseSerializer(many=True)}
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @swagger_auto_schema(
+        operation_description="Создать новый курс",
+        request_body=CourseSerializer,
+        responses={201: CourseSerializer}
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
 # ==================== LESSON VIEWS ====================
 
-@swagger_auto_schema(
-    method='get',
-    operation_description="Получить список всех уроков",
-    responses={200: LessonSerializer(many=True)}
-)
-@swagger_auto_schema(
-    method='post',
-    operation_description="Создать новый урок",
-    request_body=LessonSerializer,
-    responses={
-        201: LessonSerializer,
-        400: "Неверные данные"
-    }
-)
 class LessonListCreatedView(generics.ListCreateAPIView):
-    """
-    Создание и получение списка уроков.
-
-    Доступно всем пользователям без аутентификации.
-    """
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [permissions.AllowAny]
     pagination_class = DefaultPagination
 
+    @swagger_auto_schema(
+        operation_description="Получить список всех уроков",
+        responses={200: LessonSerializer(many=True)}
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
-@swagger_auto_schema(
-    method='get',
-    operation_description="Получить информацию об уроке по ID",
-    responses={
-        200: LessonSerializer,
-        404: "Урок не найден"
-    }
-)
-@swagger_auto_schema(
-    method='put',
-    operation_description="Полностью обновить урок",
-    request_body=LessonSerializer,
-    responses={
-        200: LessonSerializer,
-        400: "Неверные данные",
-        404: "Урок не найден"
-    }
-)
-@swagger_auto_schema(
-    method='patch',
-    operation_description="Частично обновить урок",
-    request_body=LessonSerializer,
-    responses={
-        200: LessonSerializer,
-        400: "Неверные данные",
-        404: "Урок не найден"
-    }
-)
-@swagger_auto_schema(
-    method='delete',
-    operation_description="Удалить урок",
-    responses={
-        204: "Урок удален",
-        404: "Урок не найден"
-    }
-)
+    @swagger_auto_schema(
+        operation_description="Создать новый урок",
+        request_body=LessonSerializer,
+        responses={201: LessonSerializer}
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+
+
 class LessonRetrieveUpdatedView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Получение, обновление и удаление конкретного урока.
-
-    Доступно всем пользователям без аутентификации.
-    """
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [permissions.AllowAny]
 
+    @swagger_auto_schema(operation_description="Получить урок по ID", responses={200: LessonSerializer})
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_description="Полностью обновить урок", request_body=LessonSerializer, responses={200: LessonSerializer})
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_description="Частично обновить урок", request_body=LessonSerializer, responses={200: LessonSerializer})
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_description="Удалить урок", responses={204: "Deleted"})
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
 # ==================== SUBSCRIPTION VIEWS ====================
 
 class SubscribeView(APIView):
