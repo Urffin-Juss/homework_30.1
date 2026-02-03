@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'users',
     'courses',
     'django_filters',
+    'django_celery_beat'
 
 ]
 
@@ -131,3 +132,11 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
+
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_DEFAULT_QUEUE = 'default'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
