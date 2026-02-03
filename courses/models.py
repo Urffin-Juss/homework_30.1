@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.conf import settings
 
@@ -98,7 +99,7 @@ class Subscription(models.Model):
 class Payment(models.Model):
     """Payment model"""
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True,  editable=False)
 
     CASH = "cash"
     TRANSFER = "transfer"
