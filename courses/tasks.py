@@ -9,7 +9,7 @@ from .models import Course, Subscription
 
 
 @shared_task
-def notify_course_updates(course_id: int)
+def notify_course_updates(course_id: int):
     course = Course.objects.get(pk=course_id)
 
     subs = Subscription.objects.filter(course=course).select_related("user")

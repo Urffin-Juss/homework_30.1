@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from celery.schedules import crontab
 
 
 
@@ -160,3 +161,10 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
 CELERY_TIMEZONE = 'Europe/Moscow'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 60 * 30
+
+CELERY_BEAT_SCHEDULE = {
+    "deactivate_inactive_users_daily": {
+        "task": "users.tasks.deactivate_inactive_users",
+        "schedule": crontab(hour=3, minute=0),  # каждый день в 03:00
+    },
+}
