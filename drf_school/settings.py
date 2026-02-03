@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'courses',
     'django_filters',
     'drf_yasg',
+    'django_celery_results',
+    'django_celery_beat',
 
 ]
 
