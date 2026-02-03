@@ -85,6 +85,7 @@ class Subscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="subscriptions")
     course = models.ForeignKey("courses.Course", on_delete=models.CASCADE, related_name="subscriptions")
     created_at = models.DateTimeField(auto_now_add=True)
+    last_notification_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         unique_together = ("user", "course")
