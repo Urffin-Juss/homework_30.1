@@ -7,10 +7,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
+from courses.tasks import notify_course_updates
 from .paginators import DefaultPagination
 from .serializers import CourseSerializer, LessonSerializer
 from courses.models import Course, Lesson, IsOwnerOrModerator, Subscription
+from datetime import timedelta, timezone
 
 
 # ==================== COURSE VIEWSET ====================
@@ -35,6 +36,13 @@ class CourseViewSet(viewsets.ModelViewSet):
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
+
+
+    def perform_update(self, serializer):
+        course = serializer.save()
+
+        if not course.last_notification_at or course.last_notification_at <= timezone.now() - timedelta(hours=4):
+            notify_course_updates.delay(course.id)
 
 # ==================== LESSON VIEWS ====================
 
@@ -81,6 +89,13 @@ class LessonRetrieveUpdatedView(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(operation_description="Удалить урок", responses={204: "Deleted"})
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
+    def perform_update(self, serializer):
+        lesson = serializer.save()
+        course = lesson.course
+
+        if not course.last_notification_at or course.last_notification_at <= timezone.now() - timedelta(hours=4):
+            notify_course_updates.delay(course.id)
 # ==================== SUBSCRIPTION VIEWS ====================
 
 class SubscribeView(APIView):

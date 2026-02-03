@@ -32,4 +32,3 @@ def notify_course_updates(course_id: int)
     course.save(update_fields=["last_notification_at"])
     return len(emails)
 
-
